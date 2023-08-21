@@ -3,16 +3,12 @@ package org.acme;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatGptRequest {
+public record ChatGptRequest(String model, List<ChatGptMessage> messages) {
 
-    public String model;
-    public List<ChatGptMessage> messages;
-
-    public ChatGptRequest(String model, String prompt) {
-        this.model = model;
-        
-        this.messages = new ArrayList<>();
-        this.messages.add(new ChatGptMessage("user", prompt));
+    public static ChatGptRequest newRequest(String model, String prompt) {
+        final List<ChatGptMessage> messages = new ArrayList<>();
+        messages.add(new ChatGptMessage("user", prompt));
+        return new ChatGptRequest(model, messages);
     }
 
 }

@@ -13,24 +13,28 @@ import jakarta.ws.rs.core.MediaType;
 @Path("/interact")
 public class HelloChatGpt {
 
+    // Injects the Rest Client interface created before
     @RestClient
     ChatGptService chatGpt;
 
+    // Injects some of the required properties by Chat GPT
     @ConfigProperty(name = "openai.model")
     String openaiModel;
 
     @ConfigProperty(name = "openai.key")
     String openaiKey;
 
+    // Endpoint definition
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public String completion(String prompt) {
         return chatGpt.completion(getBearer(),
-            new ChatGptRequest(openaiModel, prompt))
-        .choices.toString();
+            ChatGptRequest.newRequest(openaiModel, prompt))
+        .choices().toString();
     }
 
+    // Builds the Bearer token
     private String getBearer() {
         return "Bearer " + openaiKey;
     }
